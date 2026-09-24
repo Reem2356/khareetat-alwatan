@@ -1,0 +1,1918 @@
+@font-face {
+  font-family: "Saudi";
+  src: url("./assets/fonts/Saudi-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Saudi";
+  src: url("./assets/fonts/Saudi-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Arabic";
+  src: url("./assets/fonts/IBMPlexSansArabic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Arabic";
+  src: url("./assets/fonts/IBMPlexSansArabic-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --ink: #f8faf8;
+  --muted: #a9c1bd;
+  --deep: #002628;
+  --deep-2: #00343a;
+  --green: #00894a;
+  --green-bright: #06a132;
+  --line: rgba(0, 137, 74, 0.3);
+  --panel: rgba(0, 52, 58, 0.72);
+  --selected: #00894a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--deep);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "IBM Plex Arabic", system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(0, 137, 74, 0.2), transparent 24rem),
+    radial-gradient(circle at 92% 88%, rgba(0, 80, 175, 0.13), transparent 27rem),
+    linear-gradient(rgba(0, 137, 74, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 137, 74, 0.09) 1px, transparent 1px),
+    var(--deep);
+  background-size: auto, auto, 44px 44px, 44px 44px, auto;
+  background-position: 0 0, 100% 100%, 0 0, 0 0, 0 0;
+  animation: background-drift 24s ease-in-out infinite alternate;
+}
+
+.ambient-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient-field span {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(139, 220, 70, 0.38);
+  transform: rotate(45deg);
+  animation: ambient-rise 13s linear infinite;
+}
+
+.ambient-field span:nth-child(1) { inset-inline-start: 8%; inset-block-start: 83%; animation-delay: -2s; }
+.ambient-field span:nth-child(2) { inset-inline-start: 24%; inset-block-start: 64%; animation-delay: -8s; animation-duration: 17s; }
+.ambient-field span:nth-child(3) { inset-inline-start: 42%; inset-block-start: 91%; animation-delay: -4s; animation-duration: 19s; }
+.ambient-field span:nth-child(4) { inset-inline-start: 63%; inset-block-start: 76%; animation-delay: -11s; animation-duration: 15s; }
+.ambient-field span:nth-child(5) { inset-inline-start: 79%; inset-block-start: 88%; animation-delay: -6s; animation-duration: 18s; }
+.ambient-field span:nth-child(6) { inset-inline-start: 93%; inset-block-start: 69%; animation-delay: -13s; animation-duration: 20s; }
+
+button,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+.skip-link {
+  position: fixed;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 1rem;
+  z-index: 20;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  color: #002628;
+  background: #fff;
+  transform: translateY(-160%);
+  transition: transform 180ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.page-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1500px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 26px 0 18px;
+}
+
+.topbar {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(230px, 0.7fr) minmax(190px, 0.8fr) minmax(300px, 1.1fr);
+  gap: 20px;
+  align-items: center;
+  min-height: 118px;
+  margin-bottom: 22px;
+  padding: 16px 22px;
+  border: 1px solid var(--line);
+  background: rgba(0, 38, 40, 0.74);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  animation: topbar-enter 720ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 0;
+  width: 11px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--green) 0 11px,
+    transparent 11px 22px,
+    #5aba1c 22px 33px,
+    transparent 33px 44px
+  );
+  background-position: 0 0;
+  animation: woven-rail 3.6s linear infinite;
+}
+
+.identity-lockup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ministry-logo {
+  display: block;
+  width: min(46%, 108px);
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+.ministry-caption {
+  align-self: center;
+  margin: 0;
+  padding-inline: 20px;
+  border-inline: 1px solid rgba(0, 137, 74, 0.24);
+  color: #eaf3f0;
+  font-family: "IBM Plex Arabic", sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.6rem, 1.45vw, 1.4rem);
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.identity-divider {
+  width: 1px;
+  height: 46px;
+  flex: 0 0 auto;
+  background: linear-gradient(to bottom, transparent, rgba(139, 220, 70, 0.45), transparent);
+}
+
+.identity-lockup::after {
+  content: "";
+  position: absolute;
+  inset-block: -30%;
+  inset-inline-start: -45%;
+  width: 26%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-14deg);
+  animation: logo-shine 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.identity-logo {
+  display: block;
+  width: min(48%, 170px);
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.page-heading {
+  padding-inline-start: 24px;
+  border-inline-start: 1px solid rgba(0, 137, 74, 0.24);
+}
+
+.eyebrow,
+.section-number {
+  margin: 0 0 4px;
+  color: #8bdc46;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+}
+
+.page-heading h1 {
+  margin: 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3.9rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.page-heading > p:last-child {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.national-day-badge {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 10px;
+  min-width: 154px;
+  padding-inline-start: 16px;
+  color: #fff;
+}
+
+.national-day-badge > span {
+  align-self: end;
+  color: #8bdc46;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.national-day-badge strong {
+  grid-row: 1 / 3;
+  grid-column: 2;
+  font-family: "Saudi", sans-serif;
+  color: #fff;
+  font-size: 4rem;
+  line-height: 0.8;
+  text-shadow: 0 0 0 rgba(139, 220, 70, 0);
+  animation: badge-breathe 3.2s ease-in-out infinite;
+}
+
+.national-day-badge small {
+  align-self: start;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.explorer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(400px, 0.9fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.map-card,
+.detail-card {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: rgba(0, 38, 40, 0.82);
+  box-shadow: 0 24px 70px rgba(0, 17, 18, 0.28);
+  overflow: hidden;
+}
+
+.map-card {
+  display: flex;
+  min-height: 900px;
+  flex-direction: column;
+  padding: 25px 28px 20px;
+  animation: card-enter-right 760ms 120ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.card-heading {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.card-heading h2 {
+  margin: 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: clamp(1.65rem, 2.2vw, 2.6rem);
+  line-height: 1.15;
+}
+
+.map-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.map-stat strong {
+  color: #fff;
+  font-family: "Saudi", sans-serif;
+  font-size: 2rem;
+  animation: stat-pulse 3.4s ease-in-out infinite;
+}
+
+.map-stat span {
+  font-size: 0.82rem;
+}
+
+.map-stage {
+  position: relative;
+  display: grid;
+  min-height: 720px;
+  flex: 1;
+  place-items: center;
+  isolation: isolate;
+}
+
+.map-stage::before {
+  content: "";
+  position: absolute;
+  inset: 9% 12%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 137, 74, 0.15), transparent 70%);
+  filter: blur(18px);
+  animation: halo-breathe 5s ease-in-out infinite;
+}
+
+.map-stage::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 2.5%;
+  inset-block: 17% 17%;
+  width: 4px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #00894a 0 7px,
+    transparent 7px 14px,
+    #5aba1c 14px 21px,
+    transparent 21px 28px
+  );
+  opacity: 0.8;
+  background-position: 0 0;
+  animation: woven-rail 3s linear infinite reverse;
+}
+
+.map-orbit {
+  position: absolute;
+  z-index: -1;
+  border: 1px dashed rgba(139, 220, 70, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.orbit-one {
+  width: min(74%, 540px);
+  aspect-ratio: 1;
+  animation: orbit-spin 28s linear infinite;
+}
+
+.orbit-two {
+  width: min(54%, 390px);
+  aspect-ratio: 1;
+  border-color: rgba(37, 122, 214, 0.18);
+  border-style: dotted;
+  animation: orbit-spin 20s linear infinite reverse;
+}
+
+.floating-motifs {
+  position: absolute;
+  inset: 7% 8%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.floating-motifs i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.35) 45%, transparent 72%);
+  filter: blur(0.4px);
+  animation: motif-float 6s ease-in-out infinite;
+}
+
+.floating-motifs i:nth-child(1) { inset: 9% auto auto 10%; animation-delay: -1s; }
+.floating-motifs i:nth-child(2) { inset: 22% 8% auto auto; animation-delay: -3.8s; animation-duration: 7.5s; }
+.floating-motifs i:nth-child(3) { inset: 47% auto auto 3%; animation-delay: -5s; animation-duration: 8s; }
+.floating-motifs i:nth-child(4) { inset: 68% 4% auto auto; animation-delay: -2.1s; }
+.floating-motifs i:nth-child(5) { inset: auto auto 7% 19%; animation-delay: -4.6s; animation-duration: 7s; }
+.floating-motifs i:nth-child(6) { inset: auto 20% 4% auto; animation-delay: -0.8s; animation-duration: 9s; }
+.floating-motifs i:nth-child(7) { inset: 7% 34% auto auto; animation-delay: -6s; }
+.floating-motifs i:nth-child(8) { inset: 82% 46% auto auto; animation-delay: -3s; animation-duration: 8.5s; }
+
+.map-scan {
+  position: absolute;
+  inset-inline: 16%;
+  inset-block-start: 9%;
+  z-index: 3;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 220, 70, 0.55), transparent);
+  box-shadow: 0 0 18px rgba(139, 220, 70, 0.25);
+  opacity: 1;
+  pointer-events: none;
+  animation: map-scan 7s ease-in-out infinite;
+}
+
+.saudi-map {
+  display: block;
+  width: min(100%, 1180px);
+  height: min(85vh, 800px);
+  min-height: 620px;
+  overflow: visible;
+  filter: drop-shadow(0 22px 22px rgba(0, 12, 13, 0.34));
+  animation: map-float 6.5s ease-in-out infinite;
+}
+
+.region-shape {
+  fill: var(--region-fill, var(--region-color));
+  fill-opacity: 0.82;
+  stroke: #002628;
+  stroke-width: 5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  opacity: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: region-reveal 760ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+  animation-delay: var(--path-delay, 160ms);
+  transition: fill-opacity 180ms ease, filter 180ms ease, stroke 180ms ease, transform 180ms ease;
+}
+
+.region-shape:hover,
+.region-shape:focus-visible {
+  fill-opacity: 1;
+  stroke: #fff;
+  outline: none;
+  filter: brightness(1.14) drop-shadow(0 0 8px rgba(255, 255, 255, 0.18));
+  transform: translateY(-3px) scale(1.018);
+}
+
+.region-shape.is-selected {
+  fill-opacity: 1;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+  filter: brightness(1.12) drop-shadow(0 0 13px color-mix(in srgb, var(--region-color) 68%, transparent)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+  stroke-dasharray: 1.5 7;
+  stroke-linecap: round;
+  animation:
+    region-reveal 760ms cubic-bezier(0.2, 0.82, 0.2, 1) both,
+    selected-border 1.6s linear infinite,
+    selected-breathe 2.6s ease-in-out infinite;
+  animation-delay: var(--path-delay, 160ms), 0ms, 0ms;
+}
+
+.tap-ripple {
+  position: absolute;
+  z-index: 7;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: tap-ripple 720ms ease-out forwards;
+}
+
+.map-tooltip {
+  position: absolute;
+  z-index: 8;
+  max-width: 220px;
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+  color: #fff;
+  background: rgba(0, 31, 35, 0.96);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  font-size: 0.82rem;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 14px));
+  transition: opacity 120ms ease;
+}
+
+.map-tooltip strong,
+.map-tooltip span {
+  display: block;
+}
+
+.map-tooltip span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.map-tooltip.is-visible {
+  opacity: 1;
+  animation: tooltip-pop 220ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.map-watermark {
+  position: absolute;
+  inset-inline-end: 2%;
+  inset-block-end: 7%;
+  z-index: -1;
+  color: rgba(255, 255, 255, 0.025);
+  font-family: "Saudi", sans-serif;
+  font-size: clamp(5rem, 11vw, 10rem);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.map-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.map-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.key-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  transform: rotate(45deg);
+}
+
+.key-dot.selected {
+  border-color: var(--selected);
+  background: var(--selected);
+}
+
+.region-buttons {
+  display: none;
+}
+
+.detail-card {
+  display: flex;
+  min-height: 780px;
+  flex-direction: column;
+  padding: 28px;
+  border-top: 7px solid var(--selected);
+  overflow-y: auto;
+  scrollbar-color: var(--selected) rgba(255, 255, 255, 0.05);
+  scrollbar-width: thin;
+  transition: border-color 220ms ease;
+  animation: card-enter-left 760ms 210ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.detail-pattern {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 148px;
+  height: 112px;
+  opacity: 0.5;
+  background:
+    conic-gradient(from 45deg, var(--selected) 25%, transparent 0 50%, var(--selected) 0 75%, transparent 0) 0 0 / 18px 18px;
+  mask-image: linear-gradient(to bottom left, #000, transparent 72%);
+  pointer-events: none;
+  animation: pattern-drift 10s linear infinite;
+}
+
+.detail-topline {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.count-badge {
+  padding: 6px 9px;
+  border: 1px solid color-mix(in srgb, var(--selected) 68%, transparent);
+  border-radius: 999px;
+  color: #fff;
+  background: color-mix(in srgb, var(--selected) 18%, transparent);
+  transition: border-color 220ms ease, background 220ms ease, transform 220ms ease;
+}
+
+.detail-card.is-refreshing .count-badge {
+  animation: count-pop 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.region-title-wrap {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 38px;
+}
+
+.title-mark {
+  width: 8px;
+  min-height: 79px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--selected) 0 10px,
+    transparent 10px 16px
+  );
+  transition: background 220ms ease;
+}
+
+.region-title-wrap p {
+  margin: 0 0 3px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.region-title-wrap h2 {
+  margin: 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: clamp(2rem, 3vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+.capital-card {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 24px;
+  padding: 15px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-inline-start: 4px solid var(--selected);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.capital-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--selected);
+  transition: background 220ms ease;
+}
+
+.detail-card.is-refreshing .region-title-wrap {
+  animation: detail-slide 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.detail-card.is-refreshing .capital-card {
+  animation: detail-slide 520ms 70ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.detail-card.is-refreshing .heritage-section {
+  animation: detail-slide 520ms 130ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.detail-card.is-refreshing .governorates-section {
+  animation: detail-slide 520ms 190ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.capital-icon svg {
+  width: 23px;
+  height: 23px;
+  fill: currentColor;
+}
+
+.capital-card div {
+  display: grid;
+  gap: 2px;
+}
+
+.capital-card small {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.capital-card strong {
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: 1.32rem;
+}
+
+.heritage-section {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--selected) 35%, rgba(255, 255, 255, 0.06));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--selected) 9%, transparent), transparent 55%),
+    rgba(255, 255, 255, 0.025);
+}
+
+.heritage-heading {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.heritage-heading h3 {
+  margin: 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: 1.12rem;
+}
+
+.heritage-visual {
+  position: relative;
+  min-height: 150px;
+  margin: 14px 0 0;
+  border: 1px solid color-mix(in srgb, var(--selected) 48%, rgba(255, 255, 255, 0.1));
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.035) 8%, rgba(255, 255, 255, 0.11) 18%, rgba(255, 255, 255, 0.035) 33%) 0 0 / 220% 100%,
+    #002f32;
+  overflow: hidden;
+}
+
+.heritage-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(0, 24, 26, 0.96), transparent 62%);
+  pointer-events: none;
+}
+
+.heritage-visual.is-loading {
+  animation: image-loading 1.5s linear infinite;
+}
+
+.heritage-visual.is-error::before {
+  content: "تعذّر تحميل الصورة";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.heritage-visual img {
+  display: block;
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.035);
+  transition: opacity 320ms ease, transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.heritage-visual.is-ready img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.heritage-visual figcaption {
+  position: absolute;
+  inset-inline: 12px;
+  inset-block-end: 10px;
+  z-index: 2;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+}
+
+#heritage-image-caption {
+  color: #fff;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+#heritage-image-credit {
+  flex: 0 0 auto;
+  color: #d4e1de;
+  font-size: 0.64rem;
+  text-decoration: none;
+  opacity: 0.88;
+}
+
+#heritage-image-credit:hover,
+#heritage-image-credit:focus-visible {
+  color: #fff;
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.heritage-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  color: #fff;
+  background: var(--selected);
+}
+
+.heritage-icon svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+.heritage-section > p {
+  margin: 11px 0 0;
+  color: #d8e5e2;
+  font-size: 0.84rem;
+  line-height: 1.85;
+}
+
+.heritage-more {
+  margin-top: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(0, 24, 26, 0.28);
+}
+
+.heritage-more summary {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 11px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.heritage-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.heritage-more summary:hover,
+.heritage-more summary:focus-visible {
+  background: color-mix(in srgb, var(--selected) 14%, transparent);
+  outline: none;
+}
+
+.heritage-more summary i {
+  position: relative;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  border: 1px solid color-mix(in srgb, var(--selected) 72%, #fff);
+  border-radius: 50%;
+}
+
+.heritage-more summary i::before,
+.heritage-more summary i::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 7px;
+  height: 1px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  transition: transform 180ms ease;
+}
+
+.heritage-more summary i::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.heritage-more[open] summary i::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.heritage-details {
+  display: grid;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.heritage-detail {
+  padding: 10px 11px;
+  border-inline-start: 3px solid var(--selected);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.heritage-detail h4 {
+  margin: 0;
+  color: #fff;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: 0.88rem;
+}
+
+.heritage-detail p {
+  margin: 5px 0 0;
+  color: #c8d8d5;
+  font-size: 0.77rem;
+  line-height: 1.72;
+}
+
+.heritage-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.heritage-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 31px;
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.heritage-link::after {
+  content: "↗";
+  color: var(--selected);
+  font-size: 0.9rem;
+}
+
+.heritage-link:hover,
+.heritage-link:focus-visible {
+  border-color: var(--selected);
+  outline: none;
+  background: color-mix(in srgb, var(--selected) 15%, transparent);
+}
+
+.governorates-section {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.governorates-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.governorates-heading h3 {
+  margin: 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: 1.25rem;
+}
+
+.governorates-heading span {
+  color: var(--selected);
+  font-family: "Saudi", sans-serif;
+  font-size: 1.3rem;
+  transition: color 220ms ease;
+}
+
+.governorates-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 250px;
+  margin-top: 14px;
+  padding-inline-end: 4px;
+  overflow: auto;
+  scrollbar-color: var(--selected) rgba(255, 255, 255, 0.05);
+  scrollbar-width: thin;
+}
+
+.governorate-chip {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  color: #e8f0ee;
+  background: rgba(255, 255, 255, 0.028);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  opacity: 0;
+  animation: chip-enter 420ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--chip-delay, 180ms);
+}
+
+.governorate-chip::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin-inline-end: 8px;
+  flex: 0 0 5px;
+  background: var(--selected);
+  transform: rotate(45deg);
+}
+
+.detail-ornament {
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.detail-ornament span {
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--selected);
+  transform: rotate(45deg);
+  animation: ornament-wave 2.8s ease-in-out infinite;
+}
+
+.detail-ornament span:nth-child(2) { animation-delay: 120ms; }
+.detail-ornament span:nth-child(3) { animation-delay: 240ms; }
+.detail-ornament span:nth-child(4) { animation-delay: 360ms; }
+.detail-ornament span:nth-child(5) { animation-delay: 480ms; }
+.detail-ornament span:nth-child(6) { animation-delay: 600ms; }
+
+.detail-ornament span:nth-child(even) {
+  background: var(--selected);
+}
+
+@keyframes background-drift {
+  to { background-position: 12px -8px, calc(100% - 14px) calc(100% + 10px), 22px 14px, 22px 14px, 0 0; }
+}
+
+@keyframes ambient-rise {
+  0% { opacity: 0; transform: translateY(12vh) rotate(45deg) scale(0.7); }
+  18% { opacity: 0.42; }
+  82% { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-105vh) rotate(225deg) scale(1.35); }
+}
+
+@keyframes topbar-enter {
+  from { opacity: 0; transform: translateY(-18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes card-enter-right {
+  from { opacity: 0; transform: translateX(24px) translateY(10px); }
+  to { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes card-enter-left {
+  from { opacity: 0; transform: translateX(-24px) translateY(10px); }
+  to { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes woven-rail {
+  to { background-position: 0 44px; }
+}
+
+@keyframes logo-shine {
+  0%, 64% { inset-inline-start: -45%; opacity: 0; }
+  72% { opacity: 1; }
+  88%, 100% { inset-inline-start: 120%; opacity: 0; }
+}
+
+@keyframes badge-breathe {
+  0%, 100% { text-shadow: 0 0 0 rgba(139, 220, 70, 0); transform: scale(1); }
+  50% { text-shadow: 0 0 22px rgba(139, 220, 70, 0.28); transform: scale(1.035); }
+}
+
+@keyframes stat-pulse {
+  0%, 100% { color: #fff; }
+  50% { color: #8bdc46; }
+}
+
+@keyframes halo-breathe {
+  0%, 100% { opacity: 0.7; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+
+@keyframes motif-float {
+  0%, 100% { opacity: 0.15; transform: translateY(0) scale(0.7); }
+  50% { opacity: 0.85; transform: translateY(-13px) scale(1.25); }
+}
+
+@keyframes map-scan {
+  0%, 12% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 0.8; }
+  68% { opacity: 0.22; }
+  76%, 100% { opacity: 0; transform: translateY(430px); }
+}
+
+@keyframes map-float {
+  0%, 100% { transform: translateY(2px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes region-reveal {
+  from { opacity: 0; transform: scale(0.94) translateY(9px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes selected-border { to { stroke-dashoffset: -46; } }
+
+@keyframes selected-breathe {
+  0%, 100% { stroke-width: 2; stroke-opacity: 0.7; }
+  50% { stroke-width: 2.6; stroke-opacity: 1; }
+}
+
+@keyframes tap-ripple {
+  from { opacity: 0.85; transform: scale(0.35); }
+  to { opacity: 0; transform: scale(4.6); }
+}
+
+@keyframes tooltip-pop {
+  from { opacity: 0; scale: 0.9; }
+  to { opacity: 1; scale: 1; }
+}
+
+@keyframes pattern-drift {
+  to { background-position: 36px 18px; }
+}
+
+@keyframes image-loading {
+  to { background-position: -220% 0, 0 0; }
+}
+
+@keyframes count-pop {
+  0% { opacity: 0.35; transform: scale(0.82); }
+  70% { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes detail-slide {
+  from { opacity: 0; transform: translateX(-16px) translateY(8px); }
+  to { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes chip-enter {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes ornament-wave {
+  0%, 100% { opacity: 0.4; transform: translateY(0) rotate(45deg); }
+  50% { opacity: 1; transform: translateY(-5px) rotate(135deg); }
+}
+
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 4px 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+footer p {
+  margin: 0;
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.sources a {
+  color: #cce1dc;
+  text-underline-offset: 3px;
+}
+
+.credit {
+  flex-basis: 100%;
+  order: 3;
+  margin-top: 6px !important;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 137, 74, 0.18);
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.sources a:hover,
+.sources a:focus-visible {
+  color: #fff;
+}
+
+@media (max-width: 1080px) {
+  .topbar {
+    grid-template-columns: 220px minmax(0, 0.7fr) minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .ministry-caption {
+    padding-inline: 0;
+    font-size: clamp(0.6rem, 1.35vw, 1rem);
+  }
+
+  .page-heading {
+    padding-inline-start: 16px;
+  }
+
+  .explorer {
+    grid-template-columns: minmax(0, 1.4fr) minmax(340px, 0.85fr);
+  }
+
+  .map-card,
+  .detail-card {
+    min-height: 820px;
+  }
+
+  .map-card {
+    padding-inline: 20px;
+  }
+
+  .detail-card {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 880px) {
+  .page-shell {
+    width: min(100% - 28px, 760px);
+  }
+
+  .topbar {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .page-heading {
+    padding-inline-start: 0;
+  }
+
+  .ministry-caption {
+    padding: 0 0 12px;
+    border-inline: 0;
+    border-bottom: 1px solid rgba(0, 137, 74, 0.24);
+    text-align: start;
+    font-size: clamp(0.85rem, 3vw, 1.3rem);
+  }
+
+  .explorer {
+    grid-template-columns: 1fr;
+  }
+
+  .map-card,
+  .detail-card {
+    min-height: auto;
+  }
+
+  .map-stage {
+    min-height: 660px;
+  }
+
+  .saudi-map {
+    height: 640px;
+  }
+
+  .region-buttons {
+    display: flex;
+    gap: 7px;
+    padding: 7px 0 12px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .region-button {
+    flex: 0 0 auto;
+    padding: 7px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 999px;
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.035);
+    cursor: pointer;
+  }
+
+  .region-button.is-selected {
+    border-color: var(--button-color);
+    color: #fff;
+    background: color-mix(in srgb, var(--button-color) 25%, transparent);
+  }
+
+  .detail-card {
+    padding: 28px;
+    overflow-y: visible;
+  }
+
+  .governorates-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-height: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .page-shell {
+    width: calc(100% - 20px);
+    padding-top: 10px;
+  }
+
+  .topbar {
+    min-height: auto;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+  }
+
+  .identity-lockup {
+    gap: 9px;
+  }
+
+  .identity-logo {
+    width: 110px;
+  }
+
+  .ministry-logo {
+    width: 68px;
+  }
+
+  .ministry-caption {
+    font-size: clamp(0.58rem, 2.9vw, 0.82rem);
+  }
+
+  .identity-divider {
+    height: 34px;
+  }
+
+  .national-day-badge {
+    min-width: 112px;
+  }
+
+  .national-day-badge strong {
+    font-size: 3rem;
+  }
+
+  .national-day-badge > span,
+  .national-day-badge small {
+    font-size: 0.75rem;
+  }
+
+  .page-heading h1 {
+    font-size: 2.35rem;
+  }
+
+  .page-heading > p:last-child {
+    font-size: 0.84rem;
+  }
+
+  .map-card {
+    padding: 20px 14px 15px;
+  }
+
+  .card-heading {
+    align-items: center;
+  }
+
+  .map-stat span {
+    display: none;
+  }
+
+  .map-stage {
+    min-height: 500px;
+  }
+
+  .saudi-map {
+    height: 480px;
+    min-height: 420px;
+  }
+
+  .map-stage::after {
+    display: none;
+  }
+
+  .orbit-one { width: 86%; }
+  .orbit-two { width: 64%; }
+  .floating-motifs i:nth-child(n + 6),
+  .ambient-field span:nth-child(even) { display: none; }
+
+  .detail-card {
+    padding: 24px 18px;
+  }
+
+  .region-title-wrap {
+    margin-top: 30px;
+  }
+
+  .governorates-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  footer {
+    padding-inline: 4px;
+  }
+}
+
+/* ============================================================
+   عزّنا بقيمنا — طبقة القيم الوطنية (إضافة لا تمس التصميم القائم)
+   ============================================================ */
+
+.region-value {
+  margin: 10px 0 0;
+  line-height: 1.15;
+}
+
+.region-value .rv-prefix {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.region-value .rv-value {
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  color: var(--selected);
+  margin-inline-start: 4px;
+  transition: color 220ms ease;
+}
+
+.region-value-desc {
+  margin: 6px 0 0;
+  color: #c8d8d5;
+  font-size: 0.82rem;
+  line-height: 1.85;
+}
+
+.identity-symbols {
+  margin-top: 18px;
+}
+
+.identity-symbols h3 {
+  margin: 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.symbols-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.value-icon-badge {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid color-mix(in srgb, var(--selected) 55%, rgba(255, 255, 255, 0.18));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--selected) 16%, transparent), 0 8px 18px rgba(0, 17, 18, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.symbols-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.symbol-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 9px;
+  border: 1px solid color-mix(in srgb, var(--selected) 30%, rgba(255, 255, 255, 0.08));
+  background: rgba(255, 255, 255, 0.03);
+  color: #e8f0ee;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  transition: border-color 220ms ease, background 220ms ease;
+}
+
+.symbol-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  background: var(--selected);
+  border-radius: 50%;
+  transition: background 220ms ease;
+}
+
+.discover-heritage-btn {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  margin-top: 14px;
+  padding: 12px 16px;
+  border: 1px solid var(--selected);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--selected) 16%, transparent);
+  color: #fff;
+  font-family: "IBM Plex Arabic", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 300ms ease, border-color 300ms ease, transform 300ms ease;
+}
+
+.discover-heritage-btn:hover,
+.discover-heritage-btn:focus-visible {
+  background: color-mix(in srgb, var(--selected) 32%, transparent);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.map-tooltip em {
+  display: block;
+  margin-top: 3px;
+  padding-top: 3px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: #8bdc46;
+  font-style: normal;
+  font-size: 0.7rem;
+}
+
+/* لمعان بطيء على حدود المنطقة عند اختيار قيمة (يعيد استخدام نفس حركات
+   is-selected الموجودة، بسرعة أهدأ تناسب سرد القصة) */
+.region-shape.is-value-highlighted {
+  fill-opacity: 0.96;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+  stroke-dasharray: 1.5 7;
+  stroke-linecap: round;
+  filter: brightness(1.12) drop-shadow(0 0 14px rgba(139, 220, 70, 0.6)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+  animation: selected-border 2.4s linear infinite, selected-breathe 3.8s ease-in-out infinite;
+}
+
+.values-section {
+  position: relative;
+  margin-top: 24px;
+  padding: 44px 36px;
+  border: 1px solid var(--line);
+  background: rgba(0, 38, 40, 0.82);
+  box-shadow: 0 24px 70px rgba(0, 17, 18, 0.28);
+  overflow: hidden;
+  animation: card-enter-right 760ms 120ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.values-grid-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(rgba(0, 137, 74, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 137, 74, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at 50% 30%, #000, transparent 78%);
+  pointer-events: none;
+}
+
+.values-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+}
+
+.values-intro h2 {
+  margin: 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+  line-height: 1.1;
+}
+
+.values-lead {
+  margin: 16px 0 0;
+  color: #d8e5e2;
+  font-size: 0.95rem;
+  line-height: 2;
+}
+
+.values-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.value-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 44px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  text-align: right;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 400ms ease, background 400ms ease, box-shadow 400ms ease, transform 400ms ease;
+}
+
+.value-card:hover,
+.value-card:focus-visible {
+  border-color: var(--green-bright);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.value-card.is-active {
+  border-color: var(--green-bright);
+  background: color-mix(in srgb, var(--green-bright) 14%, transparent);
+  box-shadow: 0 0 28px rgba(6, 161, 50, 0.28);
+}
+
+.vc-num {
+  color: #8bdc46;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.vc-icon {
+  width: 56px;
+  height: 56px;
+  margin-top: 12px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 20px rgba(0, 17, 18, 0.35);
+  transition: transform 400ms ease, border-color 400ms ease;
+}
+
+.value-card:hover .vc-icon,
+.value-card.is-active .vc-icon {
+  transform: scale(1.05);
+  border-color: var(--green-bright);
+}
+
+.vc-prefix {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.vc-title {
+  display: block;
+  margin-top: 2px;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  color: #fff;
+  line-height: 1.15;
+}
+
+.vc-tagline {
+  display: block;
+  margin-top: 12px;
+  color: #c8d8d5;
+  font-size: 0.8rem;
+  line-height: 1.75;
+}
+
+@media (max-width: 880px) {
+  .values-section {
+    padding: 32px 20px;
+  }
+
+  .symbols-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .values-section {
+    padding: 26px 16px;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .heritage-visual {
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+
+  .heritage-visual img {
+    height: 100%;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* نافذة منبثقة لتفاصيل المنطقة عند الضغط عليها في الخريطة */
+.region-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 260ms ease, visibility 0s linear 260ms;
+}
+
+.region-modal.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 260ms ease, visibility 0s linear 0s;
+}
+
+.region-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 12, 13, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.region-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(560px, 100%);
+  max-height: min(88vh, 820px);
+  overflow-y: auto;
+  border: 1px solid color-mix(in srgb, var(--selected) 45%, var(--line));
+  background: linear-gradient(180deg, rgba(0, 46, 48, 0.98), rgba(0, 30, 32, 0.98));
+  box-shadow: 0 30px 90px rgba(0, 10, 11, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  padding: 28px;
+  transform: translateY(18px) scale(0.97);
+  opacity: 0;
+  transition: transform 320ms cubic-bezier(0.2, 0.82, 0.2, 1), opacity 260ms ease;
+}
+
+.region-modal.is-open .region-modal-panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.region-modal-close {
+  position: absolute;
+  inset-inline-end: 16px;
+  top: 16px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e8f0ee;
+  cursor: pointer;
+  transition: background 220ms ease, border-color 220ms ease, transform 220ms ease;
+}
+
+.region-modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.region-modal-close:hover,
+.region-modal-close:focus-visible {
+  background: color-mix(in srgb, var(--selected) 24%, transparent);
+  border-color: var(--selected);
+  outline: none;
+  transform: rotate(90deg);
+}
+
+.region-modal-icon {
+  margin: 0 0 16px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--selected);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--selected) 14%, transparent), 0 10px 26px rgba(0, 17, 18, 0.45);
+}
+
+.region-modal-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.region-modal-eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.region-modal-panel h3 {
+  margin: 6px 0 0;
+  font-family: "Saudi", "IBM Plex Arabic", sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  color: #fff;
+}
+
+.region-modal-capital {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: #cfe3df;
+  font-size: 0.9rem;
+}
+
+.region-modal-capital .capital-icon {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+}
+
+.region-modal-capital .capital-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.region-modal-body .region-value {
+  margin-top: 18px;
+}
+
+.region-modal-body .symbols-grid {
+  margin-top: 14px;
+}
+
+.region-modal-heritage {
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #d8e5e2;
+  font-size: 0.86rem;
+  line-height: 1.9;
+}
+
+.region-modal-body .discover-heritage-btn {
+  margin-top: 18px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 560px) {
+  .region-modal {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .region-modal-panel {
+    width: 100%;
+    max-height: 90vh;
+    border-inline: none;
+    border-bottom: none;
+    border-radius: 0;
+  }
+
+  .region-modal.is-open .region-modal-panel {
+    transform: translateY(0);
+  }
+
+  .region-modal-panel {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
